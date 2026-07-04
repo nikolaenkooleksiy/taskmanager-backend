@@ -1,5 +1,4 @@
 import { UserRole, AuthProvider } from '@prisma/client';
-import { Todo } from 'src/todo/model/todo.model';
 
 export class User {
   id: string;
@@ -12,7 +11,6 @@ export class User {
   providerId: string | null;
   createdAt: Date;
   updatedAt: Date;
-  todos: Todo[];
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
