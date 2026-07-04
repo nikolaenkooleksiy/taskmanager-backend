@@ -1,8 +1,6 @@
 import { User } from '../model/user.model';
 import { IUserRepository } from './user.repository.interface';
 
-export const IN_MEMORY_USER_REPOSITORY = Symbol('IN_MEMORY_USER_REPOSITORY');
-
 export class InMemoryUserRepository implements IUserRepository {
   private users = new Map<string, User>();
 
@@ -45,6 +43,8 @@ export class InMemoryUserRepository implements IUserRepository {
   }
 
   delete(userId: string): Promise<void> {
+    if (!this.users.has(userId))
+      return Promise.reject(new Error('User not found'));
     this.users.delete(userId);
     return Promise.resolve();
   }
