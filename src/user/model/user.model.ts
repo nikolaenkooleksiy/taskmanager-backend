@@ -8,7 +8,7 @@ export class User {
   password: string | null;
   role: UserRole;
   provider: AuthProvider;
-  providerId: string | null;
+  providerId: string;
   createdAt: Date;
   updatedAt: Date;
 

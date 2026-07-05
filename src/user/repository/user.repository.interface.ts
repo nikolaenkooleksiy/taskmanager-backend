@@ -8,7 +8,7 @@ export interface IUserRepository {
   findByUsername(username: string): Promise<User>;
   findByEmail(email: string): Promise<User>;
 
-  create(user: User): Promise<User>;
+  upsert(user: User): Promise<User>;
   update(userId: string, user: Partial<User>): Promise<User>;
 
   delete(userId: string): Promise<void>;

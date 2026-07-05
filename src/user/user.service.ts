@@ -48,7 +48,7 @@ export class UserService {
       updatedAt: new Date(),
     });
 
-    const created = await this.userRepository.create(user);
+    const created = await this.userRepository.upsert(user);
     return UserMapper.toResponse(created);
   }
 

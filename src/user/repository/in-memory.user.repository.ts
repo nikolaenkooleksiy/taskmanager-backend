@@ -28,9 +28,11 @@ export class InMemoryUserRepository implements IUserRepository {
     return Promise.resolve(user);
   }
 
-  create(user: User): Promise<User> {
+  upsert(user: User): Promise<User> {
     const newUser = new User({ ...user, id: crypto.randomUUID() });
+
     this.users.set(newUser.id, newUser);
+
     return Promise.resolve(newUser);
   }
 

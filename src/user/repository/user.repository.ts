@@ -36,11 +36,15 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toModel(user);
   }
 
-  async create(user: User): Promise<User> {
+  async upsert(user: User): Promise<User> {
     const data = UserMapper.toPersistence(user);
-    const createdUser = await this.db.user.create({ data });
+    const userData = await this.db.user.upsert({
+      where: { providerId: user.providerId },
+      create: data,
+      update: data,
+    });
 
-    return UserMapper.toModel(createdUser);
+    return UserMapper.toModel(userData);
   }
 
   async update(userId: string, user: Partial<User>): Promise<User> {
