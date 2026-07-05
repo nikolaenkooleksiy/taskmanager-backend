@@ -1,4 +1,5 @@
-import { IsEmail, IsString, IsUrl } from 'class-validator';
+import { AuthProvider } from '@prisma/client';
+import { IsEmail, IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -8,8 +9,12 @@ export class CreateUserDto {
   email: string;
 
   @IsUrl()
-  avatarUrl: string;
+  @IsOptional()
+  avatarUrl?: string | null;
 
   @IsString()
   providerId: string;
+
+  @IsEnum(AuthProvider)
+  provider: AuthProvider;
 }

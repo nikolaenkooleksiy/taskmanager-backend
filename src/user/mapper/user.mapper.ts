@@ -24,7 +24,6 @@ export class UserMapper {
       username: user.username,
       avatarUrl: user.avatarUrl,
       email: user.email,
-      password: user.password,
       role: user.role,
       provider: user.provider,
       providerId: user.providerId,

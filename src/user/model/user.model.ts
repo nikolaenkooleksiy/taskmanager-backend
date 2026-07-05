@@ -5,7 +5,6 @@ export class User {
   username: string;
   avatarUrl: string | null;
   email: string;
-  password: string | null;
   role: UserRole;
   provider: AuthProvider;
   providerId: string;
@@ -14,10 +13,6 @@ export class User {
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
-  }
-
-  changePassword(newPassword: string): void {
-    this.password = newPassword;
   }
 
   changeRole(newRole: UserRole): void {

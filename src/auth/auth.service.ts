@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 
 import { JwtPayload } from 'src/shared/types/jwt-payload.type';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,24 +19,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private async generateToken(userId: string, role: UserRole) {
-    const accessToken = await this.jwtService.signAsync(
-      { sub: userId, role },
-      {
-        secret: this.configService.getOrThrow<string>('JWT_ACCESS_SECRET'),
-        expiresIn: '15m',
-      },
-    );
-
-    const refreshToken = await this.jwtService.signAsync(
-      { sub: userId, role },
-      {
-        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
-        expiresIn: '31d',
-      },
-    );
-
-    return { accessToken, refreshToken };
+  async login(dto: CreateUserDto) {
+    const user = await this.userService.upsert(dto);
+    return this.generateToken(user.id, user.role);
   }
 
   async refresh(refreshToken: string) {
@@ -61,5 +47,25 @@ export class AuthService {
     } catch {
       throw new UnauthorizedException('errors.server.invalid_refresh_token');
     }
+  }
+
+  private async generateToken(userId: string, role: UserRole) {
+    const accessToken = await this.jwtService.signAsync(
+      { sub: userId, role },
+      {
+        secret: this.configService.getOrThrow<string>('JWT_ACCESS_SECRET'),
+        expiresIn: '15m',
+      },
+    );
+
+    const refreshToken = await this.jwtService.signAsync(
+      { sub: userId, role },
+      {
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+        expiresIn: '31d',
+      },
+    );
+
+    return { accessToken, refreshToken };
   }
 }
