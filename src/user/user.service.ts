@@ -35,21 +35,20 @@ export class UserService {
   }
 
   async create(dto: CreateUserDto) {
-    const user = new User({
+    const userData = new User({
       id: crypto.randomUUID(),
       username: dto.username,
       email: dto.email,
-      password: dto.password,
       avatarUrl: null,
       role: 'USER',
       provider: 'LOCAL',
-      providerId: null,
+      providerId: dto.providerId,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
-    const created = await this.userRepository.upsert(user);
-    return UserMapper.toResponse(created);
+    const user = await this.userRepository.upsert(userData);
+    return UserMapper.toResponse(user);
   }
 
   async update(userId: string, dto: UpdateUserDto) {
