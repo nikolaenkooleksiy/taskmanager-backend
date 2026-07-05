@@ -15,7 +15,7 @@ model User {
   role     UserRole @default(USER)
 
   provider     AuthProvider @default(LOCAL)
-  providerId   String? @unique
+  providerId   String @unique
 
   todos Todo[]
 
