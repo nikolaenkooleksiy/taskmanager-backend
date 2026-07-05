@@ -7,7 +7,8 @@ import { CreateUserDto } from '../dto/create-user.dto';
 const mockDto: CreateUserDto = {
   username: 'testuser',
   email: 'test@example.com',
-  password: 'password123',
+  avatarUrl: 'https://example.com/avatar.jpg',
+  providerId: '',
 };
 
 describe('UserService', () => {

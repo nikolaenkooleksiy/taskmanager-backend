@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 
-import * as crypto from 'crypto';
+import { JwtPayload } from 'src/shared/types/jwt-payload.type';
 
 @Injectable()
 export class AuthService {
@@ -24,9 +28,9 @@ export class AuthService {
     );
 
     const refreshToken = await this.jwtService.signAsync(
-      { sub: userId },
+      { sub: userId, role },
       {
-        secret: this.configService.getOrThrow('JWT_REFRESH_SECRET'),
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
         expiresIn: '31d',
       },
     );
@@ -34,13 +38,28 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  private hashToken(token: string): string {
-    return crypto.createHash('sha256').update(token).digest('hex');
-  }
+  async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw new UnauthorizedException('errors.server.refresh_token_missing');
+    }
 
-  private validaterefreshToken(token: string, tokenHash: string): boolean {
-    const hashedToken = this.hashToken(token);
+    try {
+      const payload: JwtPayload = await this.jwtService.verifyAsync(
+        refreshToken,
+        {
+          secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+        },
+      );
 
-    return hashedToken === tokenHash;
+      const user = await this.userService.findById(payload.sub);
+
+      if (!user) {
+        throw new NotFoundException('errors.server.user_not_found');
+      }
+
+      return this.generateToken(user.id, user.role);
+    } catch {
+      throw new UnauthorizedException('errors.server.invalid_refresh_token');
+    }
   }
 }
