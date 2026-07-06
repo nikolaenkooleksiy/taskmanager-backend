@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { User } from '../model/user.model';
 import { IUserRepository } from './user.repository.interface';
 
+@Injectable()
 export class InMemoryUserRepository implements IUserRepository {
   private users = new Map<string, User>();
 

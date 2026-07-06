@@ -13,8 +13,8 @@ import { AuthService } from './auth.service';
 
 import type { Response, Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { Public } from 'src/shared/decorators/is-public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -42,17 +42,23 @@ export class AuthController {
   }
 
   @Get('github')
+  @Public()
   @UseGuards(AuthGuard('github'))
   async github(): Promise<void> {}
 
   @Get('github/callback')
+  @Public()
   @UseGuards(AuthGuard('github'))
   async githubCallback(
     @Req() req: Request,
 
     @Res() res: Response,
   ) {
-    const tokens = await this.authService.login(req.user as CreateUserDto);
+    const dto = req.user;
+
+    if (!dto) throw new UnauthorizedException();
+
+    const tokens = await this.authService.login(dto);
 
     this.setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
 

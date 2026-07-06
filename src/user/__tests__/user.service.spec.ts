@@ -9,6 +9,7 @@ const mockDto: CreateUserDto = {
   email: 'test@example.com',
   avatarUrl: 'https://example.com/avatar.jpg',
   providerId: '',
+  provider: 'LOCAL',
 };
 
 describe('UserService', () => {
@@ -34,7 +35,7 @@ describe('UserService', () => {
 
   describe('create', () => {
     it('should create user and return response', async () => {
-      const user = await service.create(mockDto);
+      const user = await service.upsert(mockDto);
 
       expect(user).toBeDefined();
       expect(user.id).toBeDefined();
@@ -44,16 +45,16 @@ describe('UserService', () => {
     });
 
     it('should set default values', async () => {
-      const user = await service.create(mockDto);
+      const user = await service.upsert(mockDto);
 
       expect(user.role).toBe('USER');
-      expect(user.avatarUrl).toBeNull();
+      expect(user.avatarUrl).toBe(mockDto.avatarUrl);
     });
   });
 
   describe('findById', () => {
     it('should return user by id', async () => {
-      const created = await service.create(mockDto);
+      const created = await service.upsert(mockDto);
       const found = await service.findById(created.id);
 
       expect(found).toBeDefined();
@@ -70,7 +71,7 @@ describe('UserService', () => {
 
   describe('findByUsername', () => {
     it('should return user by username', async () => {
-      await service.create(mockDto);
+      await service.upsert(mockDto);
       const found = await service.findByUsername(mockDto.username);
 
       expect(found).toBeDefined();
@@ -86,7 +87,7 @@ describe('UserService', () => {
 
   describe('findByEmail', () => {
     it('should return user by email', async () => {
-      await service.create(mockDto);
+      await service.upsert(mockDto);
       const found = await service.findByEmail(mockDto.email);
 
       expect(found).toBeDefined();
@@ -102,7 +103,7 @@ describe('UserService', () => {
 
   describe('update', () => {
     it('should update user fields', async () => {
-      const created = await service.create(mockDto);
+      const created = await service.upsert(mockDto);
       const updated = await service.update(created.id, {
         username: 'newname',
       });
@@ -122,7 +123,7 @@ describe('UserService', () => {
 
   describe('delete', () => {
     it('should delete user', async () => {
-      const created = await service.create(mockDto);
+      const created = await service.upsert(mockDto);
       await service.delete(created.id);
 
       const users = await service.findAll();

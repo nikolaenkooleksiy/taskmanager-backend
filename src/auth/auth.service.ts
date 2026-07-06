@@ -21,6 +21,7 @@ export class AuthService {
 
   async login(dto: CreateUserDto) {
     const user = await this.userService.upsert(dto);
+
     return this.generateToken(user.id, user.role);
   }
 

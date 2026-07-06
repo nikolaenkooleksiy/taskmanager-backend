@@ -2,7 +2,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '../model/user.model';
 import { IUserRepository } from './user.repository.interface';
 import { UserMapper } from '../mapper/user.mapper';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UserRepository implements IUserRepository {
   constructor(private readonly db: PrismaService) {}
 

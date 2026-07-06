@@ -39,7 +39,7 @@ export class UserService {
       id: crypto.randomUUID(),
       username: dto.username,
       email: dto.email,
-      avatarUrl: null,
+      avatarUrl: dto.avatarUrl,
       role: 'USER',
       provider: dto.provider,
       providerId: dto.providerId,
