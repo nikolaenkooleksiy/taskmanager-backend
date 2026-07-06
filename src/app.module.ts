@@ -6,8 +6,8 @@ import { UserModule } from './user/user.module';
 import { TodoModule } from './todo/todo.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from './shared/guards/roles.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { RolesGuard } from './shared/guards/roles.guard';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AuthGuard('jwt'),
+      useClass: AuthGuard,
     },
     {
       provide: APP_GUARD,
