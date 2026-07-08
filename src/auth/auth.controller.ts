@@ -24,6 +24,7 @@ export class AuthController {
   ) {}
 
   @Post('refresh')
+  @Public()
   @HttpCode(HttpStatus.OK)
   async refresh(
     @Req() req: Request,
