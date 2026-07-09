@@ -4,6 +4,7 @@ import { InMemoryTodoRepository } from '../repository/in-memory.todo.repository'
 import { TODO_REPOSITORY } from '../repository/todo.repository.interface';
 import { CreateTodoDto } from '../dto/create-todo.dto';
 import { TodoStatus } from '@prisma/client';
+import { LlmService } from 'src/llm/llm.service';
 
 const mockDto: CreateTodoDto = {
   title: 'Test Todo',
@@ -11,6 +12,13 @@ const mockDto: CreateTodoDto = {
 };
 
 const mockUserId = 'user-123';
+
+const mockLlmService = {
+  generateDescription: jest
+    .fn()
+    .mockResolvedValue({ title: '', description: '' }),
+  generateDescriptionStream: jest.fn(),
+};
 
 describe('TodoService', () => {
   let service: TodoService;
@@ -22,6 +30,10 @@ describe('TodoService', () => {
         {
           provide: TODO_REPOSITORY,
           useClass: InMemoryTodoRepository,
+        },
+        {
+          provide: LlmService,
+          useValue: mockLlmService,
         },
       ],
     }).compile();

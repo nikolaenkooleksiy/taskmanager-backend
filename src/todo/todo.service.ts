@@ -8,11 +8,14 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './model/todo.model';
 import { TodoStatus } from '@prisma/client';
+import { LlmService } from 'src/llm/llm.service';
+import type { GenerateDescriptionDto } from 'src/llm/dto/generate-description.dto';
 
 @Injectable()
 export class TodoService {
   constructor(
     @Inject(TODO_REPOSITORY) private readonly todoRepository: ITodoRepository,
+    private readonly llmService: LlmService,
   ) {}
 
   async findAll() {
@@ -52,5 +55,22 @@ export class TodoService {
 
   async delete(todoId: string) {
     await this.todoRepository.delete(todoId);
+  }
+
+  async *generateDescriptionStream(
+    todoId: string,
+    dto: GenerateDescriptionDto,
+  ): AsyncGenerator<string> {
+    let fullDescription = '';
+
+    for await (const chunk of this.llmService.generateDescriptionStream(dto)) {
+      fullDescription += chunk;
+      yield chunk;
+    }
+
+    await this.todoRepository.update(todoId, {
+      title: dto.title,
+      description: fullDescription,
+    });
   }
 }

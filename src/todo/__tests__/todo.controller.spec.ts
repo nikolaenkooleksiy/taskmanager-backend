@@ -3,6 +3,14 @@ import { TodoController } from '../todo.controller';
 import { TodoService } from '../todo.service';
 import { TODO_REPOSITORY } from '../repository/todo.repository.interface';
 import { InMemoryTodoRepository } from '../repository/in-memory.todo.repository';
+import { LlmService } from 'src/llm/llm.service';
+
+const mockLlmService = {
+  generateDescription: jest
+    .fn()
+    .mockResolvedValue({ title: '', description: '' }),
+  generateDescriptionStream: jest.fn(),
+};
 
 describe('TodoController', () => {
   let controller: TodoController;
@@ -15,6 +23,10 @@ describe('TodoController', () => {
         {
           provide: TODO_REPOSITORY,
           useClass: InMemoryTodoRepository,
+        },
+        {
+          provide: LlmService,
+          useValue: mockLlmService,
         },
       ],
     }).compile();
