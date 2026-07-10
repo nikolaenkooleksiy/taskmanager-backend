@@ -26,9 +26,9 @@ export class ProjectService {
     return projects.map((project) => ProjectMapper.toModel(project));
   }
 
-  async findById(projectId: string) {
+  async findById(projectId: string, userId: string) {
     try {
-      const project = await this.projectRepository.findById(projectId);
+      const project = await this.projectRepository.findById(projectId, userId);
       return ProjectMapper.toModel(project);
     } catch (error) {
       if (
@@ -66,9 +66,13 @@ export class ProjectService {
     }
   }
 
-  async update(projectId: string, project: UpdateProjectDto) {
+  async update(projectId: string, project: UpdateProjectDto, userId: string) {
     try {
-      const updated = await this.projectRepository.update(projectId, project);
+      const updated = await this.projectRepository.update(
+        projectId,
+        project,
+        userId,
+      );
       return ProjectMapper.toModel(updated);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -83,9 +87,9 @@ export class ProjectService {
     }
   }
 
-  async delete(projectId: string) {
+  async delete(projectId: string, userId: string) {
     try {
-      await this.projectRepository.delete(projectId);
+      await this.projectRepository.delete(projectId, userId);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&

@@ -1,7 +1,53 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { CurrentUser } from 'src/common/decorators';
+import { type JwtPayload } from 'src/common/types';
 import { ProjectService } from '../app/project.service';
+import { CreateProjectDto } from '../dto/create-project.dto';
 
 @Controller('project')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
+
+  @Get('')
+  async findAll(@CurrentUser() payload: JwtPayload) {
+    return this.projectService.findAll(payload.sub);
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: string, @CurrentUser() payload: JwtPayload) {
+    return this.projectService.findById(id, payload.sub);
+  }
+
+  @Post()
+  async create(
+    @Body() body: CreateProjectDto,
+    @CurrentUser() payload: JwtPayload,
+  ) {
+    return this.projectService.create(body, payload.sub);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') projectId: string,
+    @Body() body: CreateProjectDto,
+    @CurrentUser() payload: JwtPayload,
+  ) {
+    return this.projectService.update(projectId, body, payload.sub);
+  }
+
+  @Delete(':id')
+  async delete(
+    @Param('id') projectId: string,
+    @CurrentUser() payload: JwtPayload,
+  ) {
+    return this.projectService.delete(projectId, payload.sub);
+  }
 }

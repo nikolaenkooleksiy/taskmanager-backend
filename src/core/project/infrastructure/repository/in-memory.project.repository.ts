@@ -13,9 +13,10 @@ export class InMemoryProjectRepository implements IProjectRepository {
     return Promise.resolve(result);
   }
 
-  findById(projectId: string): Promise<Project> {
+  findById(projectId: string, userId: string): Promise<Project> {
     const project = this.projects.get(projectId);
-    if (!project) return Promise.reject(new Error('Project not found'));
+    if (!project || project.userId !== userId)
+      return Promise.reject(new Error('Project not found'));
     return Promise.resolve(project);
   }
 
@@ -28,16 +29,22 @@ export class InMemoryProjectRepository implements IProjectRepository {
     return Promise.resolve(newProject);
   }
 
-  update(projectId: string, project: Partial<Project>): Promise<Project> {
+  update(
+    projectId: string,
+    project: Partial<Project>,
+    userId: string,
+  ): Promise<Project> {
     const existing = this.projects.get(projectId);
-    if (!existing) return Promise.reject(new Error('Project not found'));
+    if (!existing || existing.userId !== userId)
+      return Promise.reject(new Error('Project not found'));
     const updated = new Project({ ...existing, ...project });
     this.projects.set(projectId, updated);
     return Promise.resolve(updated);
   }
 
-  delete(projectId: string): Promise<void> {
-    if (!this.projects.has(projectId))
+  delete(projectId: string, userId: string): Promise<void> {
+    const existing = this.projects.get(projectId);
+    if (!existing || existing.userId !== userId)
       return Promise.reject(new Error('Project not found'));
     this.projects.delete(projectId);
     return Promise.resolve();

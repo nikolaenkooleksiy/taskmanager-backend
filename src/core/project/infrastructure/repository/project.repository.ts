@@ -13,9 +13,9 @@ export class ProjectRepository implements IProjectRepository {
     return userProjects.map((project) => ProjectMapper.toModel(project));
   }
 
-  async findById(projectId: string): Promise<Project> {
+  async findById(projectId: string, userId: string): Promise<Project> {
     const project = await this.db.project.findUniqueOrThrow({
-      where: { id: projectId },
+      where: { id: projectId, userId },
     });
 
     return ProjectMapper.toModel(project);
@@ -28,21 +28,25 @@ export class ProjectRepository implements IProjectRepository {
     return ProjectMapper.toModel(created);
   }
 
-  async update(projectId: string, project: Partial<Project>): Promise<Project> {
+  async update(
+    projectId: string,
+    project: Partial<Project>,
+    userId: string,
+  ): Promise<Project> {
     const persistenceData = ProjectMapper.toPersistence(project as Project);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { createdAt, id, ...dataToUpdate } = persistenceData;
 
     const updated = await this.db.project.update({
-      where: { id: projectId },
+      where: { id: projectId, userId },
       data: dataToUpdate,
     });
 
     return ProjectMapper.toModel(updated);
   }
 
-  async delete(projectId: string): Promise<void> {
-    await this.db.project.delete({ where: { id: projectId } });
+  async delete(projectId: string, userId: string): Promise<void> {
+    await this.db.project.delete({ where: { id: projectId, userId } });
   }
 }
