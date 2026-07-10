@@ -7,6 +7,7 @@ import { AuthModule } from './core/auth/auth.module';
 import { ProjectModule } from './core/project/project.module';
 import { UserModule } from './core/user/user.module';
 import { PrismaModule } from './infrastructure/database/prisma.module';
+import { StorageModule } from './infrastructure/storage/storage.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PrismaModule } from './infrastructure/database/prisma.module';
     UserModule,
     AuthModule,
     ProjectModule,
+    StorageModule,
   ],
   providers: [
     {
