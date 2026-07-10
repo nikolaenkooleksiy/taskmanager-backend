@@ -1,9 +1,13 @@
+jest.mock('ai', () => ({
+  createTextStreamResponse: jest.fn(),
+}));
+
 import { Test, TestingModule } from '@nestjs/testing';
-import { LlmService } from 'src/llm/llm.service';
-import { TodoController } from '../../../todo/todo.controller';
+import { LlmService } from 'src/infrastructure/llm/llm.service';
 import { TodoService } from '../app/todo.service';
+import { TODO_REPOSITORY } from '../domain/types/todo.repository.interface';
 import { InMemoryTodoRepository } from '../infrastructure/repository/in-memory.todo.repository';
-import { TODO_REPOSITORY } from '../../project/infrastructure/repository/todo.repository.interface';
+import { TodoController } from '../presentation/todo.controller';
 
 const mockLlmService = {
   generateDescription: jest

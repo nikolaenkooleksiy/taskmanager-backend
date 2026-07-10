@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from '../user.service';
-import { InMemoryUserRepository } from '../repository/in-memory.user.repository';
-import { USER_REPOSITORY } from '../repository/user.repository.interface';
 import { CreateUserDto } from '../dto/create-user.dto';
+
+import { UserService } from '../user.service';
+import { USER_REPOSITORY } from '../domain/types/user.repository.interface';
+import { InMemoryUserRepository } from '../infrastructure/repository/in-memory.user.repository';
 
 const mockDto: CreateUserDto = {
   username: 'testuser',

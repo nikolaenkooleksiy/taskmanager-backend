@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodoStatus } from '@prisma/client';
-import { LlmService } from 'src/llm/llm.service';
-import { TodoService } from '../../app/todo.service';
-import { CreateTodoDto } from '../../dto/create-todo.dto';
-import { InMemoryTodoRepository } from '../../infrastructure/repository/in-memory.todo.repository';
-import { TODO_REPOSITORY } from '../../project/infrastructure/repository/todo.repository.interface';
+import { LlmService } from 'src/infrastructure/llm/llm.service';
+import { TodoService } from '../app/todo.service';
+import { TODO_REPOSITORY } from '../domain/types/todo.repository.interface';
+import { CreateTodoDto } from '../dto/create-todo.dto';
+import { InMemoryTodoRepository } from '../infrastructure/repository/in-memory.todo.repository';
 
 const mockDto: CreateTodoDto = {
   title: 'Test Todo',
