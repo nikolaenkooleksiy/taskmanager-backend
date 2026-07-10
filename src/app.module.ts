@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
-
 import { ConfigModule } from '@nestjs/config';
-import { PrismaModule } from './prisma/prisma.module';
-import { UserModule } from './user/user.module';
-import { TodoModule } from './todo/todo.module';
-import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './shared/guards/roles.guard';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { AuthGuard } from './common/guards/auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
+import { AuthModule } from './core/auth/auth.module';
+import { TodoModule } from './core/todo/todo.module';
+import { UserModule } from './core/user/user.module';
+import { PrismaModule } from './infrastructure/database/prisma.module';
 
 @Module({
   imports: [
