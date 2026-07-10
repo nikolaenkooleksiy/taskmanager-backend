@@ -7,22 +7,40 @@ datasource db {
 }
 
 model User {
-  id       String   @id
-  username String   @unique
+  id        String   @id
+  username  String   @unique
   avatarUrl String?
-  email    String   @unique
-  role     UserRole @default(USER)
+  email     String   @unique
+  role      UserRole @default(USER)
 
-  provider     AuthProvider @default(LOCAL)
-  providerId   String @unique
+  provider   AuthProvider @default(LOCAL)
+  providerId String       @unique
 
-  todos Todo[]
+  todos    Todo[]
+  projects Project[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-
   @@map("users")
+}
+
+model Project {
+  id String @id
+
+  name        String
+  description String?
+  imageUrl    String?
+
+  todos  Todo[]
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
 }
 
 model Todo {
@@ -35,8 +53,11 @@ model Todo {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
+  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String @map("project_id")
+
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("todos")
 }

@@ -6,6 +6,7 @@ export class Todo {
   description: string | null;
   status: TodoStatus;
   userId: string;
+  projectId: string;
   createdAt: Date;
   updatedAt: Date;
 

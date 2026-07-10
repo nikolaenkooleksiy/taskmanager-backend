@@ -23,6 +23,7 @@ export class TodoMapper {
       title: todo.title,
       description: todo.description,
       status: todo.status,
+      project: { connect: { id: todo.projectId } },
       createdAt: todo.createdAt,
       updatedAt: todo.updatedAt,
       user: { connect: { id: todo.userId } },
