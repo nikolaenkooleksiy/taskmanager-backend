@@ -4,7 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { AuthModule } from './core/auth/auth.module';
-import { TodoModule } from './core/todo/todo.module';
+import { ProjectModule } from './core/project/project.module';
 import { UserModule } from './core/user/user.module';
 import { PrismaModule } from './infrastructure/database/prisma.module';
 
@@ -15,8 +15,8 @@ import { PrismaModule } from './infrastructure/database/prisma.module';
     }),
     PrismaModule,
     UserModule,
-    TodoModule,
     AuthModule,
+    ProjectModule,
   ],
   providers: [
     {

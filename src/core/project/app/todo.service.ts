@@ -2,14 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TodoStatus } from '@prisma/client';
 import { GenerateDescriptionDto } from 'src/infrastructure/llm/dto/generate-description.dto';
 import { LlmService } from 'src/infrastructure/llm/llm.service';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
-import { TodoMapper } from './mapper/todo.mapper';
-import { Todo } from './model/todo.model';
+import { Todo } from '../domain/model/todo.model';
 import {
-  TODO_REPOSITORY,
   type ITodoRepository,
-} from './repository/todo.repository.interface';
+  TODO_REPOSITORY,
+} from '../domain/types/todo.repository.interface';
+import { CreateTodoDto } from '../dto/create-todo.dto';
+import { UpdateTodoDto } from '../dto/update-todo.dto';
+import { TodoMapper } from '../infrastructure/mapper/todo.mapper';
 
 @Injectable()
 export class TodoService {

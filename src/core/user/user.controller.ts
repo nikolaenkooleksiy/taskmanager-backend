@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Patch } from '@nestjs/common';
 import { CurrentUser } from 'src/common/decorators';
 import { type JwtPayload } from 'src/common/types';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')

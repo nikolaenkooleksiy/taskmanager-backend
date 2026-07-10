@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TodoController } from '../todo.controller';
-import { TodoService } from '../todo.service';
-import { TODO_REPOSITORY } from '../repository/todo.repository.interface';
-import { InMemoryTodoRepository } from '../repository/in-memory.todo.repository';
 import { LlmService } from 'src/llm/llm.service';
+import { TodoController } from '../../../todo/todo.controller';
+import { TodoService } from '../app/todo.service';
+import { InMemoryTodoRepository } from '../infrastructure/repository/in-memory.todo.repository';
+import { TODO_REPOSITORY } from '../../project/infrastructure/repository/todo.repository.interface';
 
 const mockLlmService = {
   generateDescription: jest

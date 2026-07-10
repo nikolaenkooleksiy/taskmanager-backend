@@ -9,7 +9,7 @@ import { UserRole } from '@prisma/client';
 import { UserService } from 'src/core/user/user.service';
 
 import { JwtPayload } from 'src/common/types/jwt-payload.type';
-import { CreateUserDto } from 'src/core/user/dtos/create-user.dto';
+import { CreateUserDto } from 'src/core/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {

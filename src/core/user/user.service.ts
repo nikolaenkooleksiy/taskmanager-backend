@@ -4,8 +4,8 @@ import {
   type IUserRepository,
   USER_REPOSITORY,
 } from './domain/types/user.repository.interface';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UserMapper } from './infrastructure/mapper/user.mapper';
 
 @Injectable()

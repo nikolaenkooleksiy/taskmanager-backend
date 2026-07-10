@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Todo } from '../model/todo.model';
-import { ITodoRepository } from './todo.repository.interface';
+import { Todo } from '../../domain/model/todo.model';
+import { type ITodoRepository } from '../../domain/types/todo.repository.interface';
 
 @Injectable()
 export class InMemoryTodoRepository implements ITodoRepository {

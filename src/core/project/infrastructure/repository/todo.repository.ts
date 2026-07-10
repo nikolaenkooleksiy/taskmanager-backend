@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/infrastructure/database/prisma.service';
+import { Todo } from '../../domain/model/todo.model';
+import { type ITodoRepository } from '../../domain/types/todo.repository.interface';
 import { TodoMapper } from '../mapper/todo.mapper';
-import { Todo } from '../model/todo.model';
-import { ITodoRepository } from './todo.repository.interface';
 
 @Injectable()
 export class TodoRepository implements ITodoRepository {

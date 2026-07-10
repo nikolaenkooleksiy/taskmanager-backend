@@ -1,6 +1,6 @@
 import { Prisma, User as PrismaUser } from '@prisma/client';
 import { User } from '../../domain/model/user.model';
-import { UserResponseDto } from '../../dtos/user-response.dto';
+import { UserResponseDto } from '../../dto/user-response.dto';
 
 export class UserMapper {
   static toResponse(user: User): UserResponseDto {

@@ -14,11 +14,11 @@ import { type Response } from 'express';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { type JwtPayload } from 'src/common/types/jwt-payload.type';
 import { GenerateDescriptionDto } from 'src/infrastructure/llm/dto/generate-description.dto';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
-import { TodoService } from './todo.service';
 
 import { createTextStreamResponse } from 'ai';
+import { TodoService } from '../app/todo.service';
+import { CreateTodoDto } from '../dto/create-todo.dto';
+import { UpdateTodoDto } from '../dto/update-todo.dto';
 
 @Controller('todo')
 export class TodoController {

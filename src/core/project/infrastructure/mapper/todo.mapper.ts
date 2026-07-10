@@ -1,6 +1,6 @@
 import { Prisma, Todo as PrismaTodo } from '@prisma/client';
-import { TodoResponseDto } from '../dto/todo-response.dto';
-import { Todo } from '../model/todo.model';
+import { Todo } from '../../domain/model/todo.model';
+import { TodoResponseDto } from '../../dto/todo-response.dto';
 
 export class TodoMapper {
   static toResponse(todo: Todo): TodoResponseDto {
