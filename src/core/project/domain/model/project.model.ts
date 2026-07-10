@@ -5,6 +5,7 @@ export class Project {
   name: string;
   description: string | null;
   imageUrl: string | null;
+  userId: string;
   todos: Todo[];
   createdAt: Date;
   updatedAt: Date;
