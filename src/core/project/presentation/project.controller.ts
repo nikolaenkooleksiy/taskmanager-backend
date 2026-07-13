@@ -43,6 +43,31 @@ export class ProjectController {
     return this.projectService.update(projectId, body, payload.sub);
   }
 
+  @Post('upload-url')
+  async getUploadUrl(
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: { fileName: string; contentType: string },
+  ) {
+    return this.projectService.generateProjectImageUrl(
+      user.sub,
+      dto.fileName,
+      dto.contentType,
+    );
+  }
+
+  @Post('confirm')
+  async confirmUpload(
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: { key: string },
+    @CurrentUser() payload: JwtPayload,
+  ) {
+    return await this.projectService.confirmProjectImageUpload(
+      user.sub,
+      dto.key,
+      payload.role,
+    );
+  }
+
   @Delete(':id')
   async delete(
     @Param('id') projectId: string,

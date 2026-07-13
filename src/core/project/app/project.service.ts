@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { StorageService } from 'src/infrastructure/storage/storage.service';
 import { Project } from '../domain/model/project.model';
 import {
   type IProjectRepository,
@@ -19,6 +20,7 @@ export class ProjectService {
   constructor(
     @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: IProjectRepository,
+    private readonly storageService: StorageService,
   ) {}
 
   async findAll(userId: string) {
@@ -73,6 +75,7 @@ export class ProjectService {
         project,
         userId,
       );
+
       return ProjectMapper.toModel(updated);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -85,6 +88,31 @@ export class ProjectService {
       }
       throw error;
     }
+  }
+
+  async generateProjectImageUrl(
+    projectId: string,
+    fileName: string,
+    contentType: string,
+  ) {
+    const folder = `projects/${projectId}`;
+    return this.storageService.getUploadUrl(folder, fileName, contentType);
+  }
+
+  async confirmProjectImageUpload(
+    userId: string,
+    projectId: string,
+    key: string,
+  ) {
+    const projectImageUrl = await this.storageService.getDownloadUrl(key);
+
+    await this.projectRepository.update(
+      projectId,
+      {
+        imageUrl: projectImageUrl,
+      },
+      userId,
+    );
   }
 
   async delete(projectId: string, userId: string) {

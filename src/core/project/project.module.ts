@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { LlmModule } from 'src/infrastructure/llm/llm.module';
+import { StorageService } from 'src/infrastructure/storage/storage.service';
 import { ProjectService } from './app/project.service';
 import { TodoService } from './app/todo.service';
 import { PROJECT_REPOSITORY } from './domain/types/project.repository.interface';
@@ -17,6 +18,7 @@ import { TodoController } from './presentation/todo.controller';
   providers: [
     ProjectService,
     TodoService,
+    StorageService,
     {
       provide: TODO_REPOSITORY,
       useClass: TodoRepository,
