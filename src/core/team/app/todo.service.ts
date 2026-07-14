@@ -38,7 +38,7 @@ export class TodoService {
       id: crypto.randomUUID(),
       title: dto.title,
       description: dto.description ?? null,
-      status: TodoStatus.PENDING,
+      status: TodoStatus.Pending,
       userId,
       createdAt: new Date(),
       updatedAt: new Date(),

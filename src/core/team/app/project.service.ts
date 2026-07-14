@@ -23,15 +23,17 @@ export class ProjectService {
     private readonly storageService: StorageService,
   ) {}
 
-  async findAll(userId: string) {
-    const projects = await this.projectRepository.findAll(userId);
-    return projects.map((project) => ProjectMapper.toModel(project));
+  async findAll(teamId: string, userId: string) {
+    const projects = await this.projectRepository.findAll(teamId, userId);
+
+    return projects.map((project) => ProjectMapper.toResponse(project));
   }
 
   async findById(projectId: string, userId: string) {
     try {
       const project = await this.projectRepository.findById(projectId, userId);
-      return ProjectMapper.toModel(project);
+
+      return ProjectMapper.toResponse(project);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -45,18 +47,16 @@ export class ProjectService {
 
   async create(dto: CreateProjectDto, userId: string) {
     try {
-      const project = new Project({
-        id: crypto.randomUUID(),
+      const project = Project.create({
         name: dto.name,
         description: dto.description ?? null,
         imageUrl: dto.imageUrl ?? null,
-        userId,
-        todos: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        teamId: userId,
       });
+
       const created = await this.projectRepository.create(project);
-      return ProjectMapper.toModel(created);
+
+      return ProjectMapper.toResponse(created);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -72,11 +72,15 @@ export class ProjectService {
     try {
       const updated = await this.projectRepository.update(
         projectId,
-        project,
         userId,
+        project,
       );
 
-      return ProjectMapper.toModel(updated);
+      if (!updated) {
+        throw new NotFoundException('Project not found');
+      }
+
+      return ProjectMapper.toResponse(updated);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
@@ -106,13 +110,9 @@ export class ProjectService {
   ) {
     const projectImageUrl = await this.storageService.getDownloadUrl(key);
 
-    await this.projectRepository.update(
-      projectId,
-      {
-        imageUrl: projectImageUrl,
-      },
-      userId,
-    );
+    await this.projectRepository.update(projectId, userId, {
+      imageUrl: projectImageUrl,
+    });
   }
 
   async delete(projectId: string, userId: string) {

@@ -40,7 +40,7 @@ export class UserService {
       username: dto.username,
       email: dto.email,
       avatarUrl: dto.avatarUrl,
-      role: 'USER',
+      role: 'User',
       provider: dto.provider,
       providerId: dto.providerId,
       createdAt: new Date(),

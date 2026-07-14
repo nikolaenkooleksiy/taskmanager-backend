@@ -41,7 +41,12 @@ export class UserRepository implements IUserRepository {
   async upsert(user: User): Promise<User> {
     const data = UserMapper.toPersistence(user);
     const userData = await this.db.user.upsert({
-      where: { providerId: user.providerId },
+      where: {
+        provider_providerId: {
+          provider: user.provider,
+          providerId: user.providerId,
+        },
+      },
       create: data,
       update: data,
     });

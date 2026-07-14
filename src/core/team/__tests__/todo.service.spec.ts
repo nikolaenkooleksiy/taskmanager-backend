@@ -53,14 +53,14 @@ describe('TodoService', () => {
       expect(todo.id).toBeDefined();
       expect(todo.title).toBe(mockDto.title);
       expect(todo.description).toBe(mockDto.description);
-      expect(todo.status).toBe(TodoStatus.PENDING);
+      expect(todo.status).toBe(TodoStatus.Pending);
     });
 
     it('should default status to PENDING', async () => {
       const dto: CreateTodoDto = { title: 'No status' };
       const todo = await service.create(dto, mockUserId);
 
-      expect(todo.status).toBe(TodoStatus.PENDING);
+      expect(todo.status).toBe(TodoStatus.Pending);
     });
 
     it('should default description to null', async () => {

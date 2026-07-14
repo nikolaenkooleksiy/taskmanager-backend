@@ -1,4 +1,4 @@
-import { Prisma, Project as PrismaProject } from '@prisma/client';
+import { Project as PrismaProject } from '@prisma/client';
 import { Project } from '../../domain/model/project.model';
 import { ProjectResponseDto } from '../../dto/project-response.dto';
 
@@ -13,17 +13,17 @@ export class ProjectMapper {
     };
   }
 
-  static toModel(project: PrismaProject): Project {
-    return new Project(project);
+  static toDomain(project: PrismaProject): Project {
+    return Project.restore({ ...project });
   }
 
-  static toPersistence(project: Project): Prisma.ProjectCreateInput {
+  static toPersistence(project: Project) {
     return {
       id: project.id,
       name: project.name,
-      user: { connect: { id: project.userId } },
       description: project.description,
       imageUrl: project.imageUrl,
+      teamId: project.teamId,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
     };

@@ -42,13 +42,13 @@ describe('UserService', () => {
       expect(user.id).toBeDefined();
       expect(user.username).toBe(mockDto.username);
       expect(user.email).toBe(mockDto.email);
-      expect(user.role).toBe('USER');
+      expect(user.role).toBe('User');
     });
 
     it('should set default values', async () => {
       const user = await service.upsert(mockDto);
 
-      expect(user.role).toBe('USER');
+      expect(user.role).toBe('User');
       expect(user.avatarUrl).toBe(mockDto.avatarUrl);
     });
   });

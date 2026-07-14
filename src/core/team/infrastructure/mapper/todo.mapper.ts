@@ -26,7 +26,7 @@ export class TodoMapper {
       project: { connect: { id: todo.projectId } },
       createdAt: todo.createdAt,
       updatedAt: todo.updatedAt,
-      user: { connect: { id: todo.userId } },
+      assignee: { connect: { id: todo.userId } },
     };
   }
 }

@@ -31,7 +31,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     }
 
     return {
-      provider: 'GITHUB',
+      provider: 'GitHub',
       providerId: id,
       username,
       email: emails[0].value,

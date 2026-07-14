@@ -22,7 +22,7 @@ export class TodoRepository implements ITodoRepository {
 
   async findByUserId(userId: string): Promise<Todo[]> {
     const todos = await this.db.todo.findMany({
-      where: { userId },
+      where: { assigneeId: userId },
     });
     return todos.map((todo) => TodoMapper.toModel(todo));
   }

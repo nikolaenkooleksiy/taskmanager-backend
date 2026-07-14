@@ -16,9 +16,12 @@ import { CreateProjectDto } from '../dto/create-project.dto';
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Get('')
-  async findAll(@CurrentUser() payload: JwtPayload) {
-    return this.projectService.findAll(payload.sub);
+  @Get(':teamId')
+  async findAll(
+    @Param('teamId') teamId: string,
+    @CurrentUser() payload: JwtPayload,
+  ) {
+    return this.projectService.findAll(teamId, payload.sub);
   }
 
   @Get(':id')
