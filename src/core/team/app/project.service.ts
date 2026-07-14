@@ -51,7 +51,7 @@ export class ProjectService {
         name: dto.name,
         description: dto.description ?? null,
         imageUrl: dto.imageUrl ?? null,
-        teamId: userId,
+        teamId: dto.teamId,
       });
 
       const created = await this.projectRepository.create(project);

@@ -29,15 +29,30 @@ export class InMemoryProjectRepository implements IProjectRepository {
   update(
     projectId: string,
     userId: string,
-    project: Project,
+    project: Partial<Project>,
   ): Promise<Project | null> {
-    if (!this.projects.has(projectId)) {
+    const existing = this.projects.get(projectId);
+    if (!existing) {
       return Promise.resolve(null);
     }
 
-    this.projects.set(projectId, project);
+    const updated = Project.restore({
+      id: existing.id,
+      name: project.name ?? existing.name,
+      description:
+        project.description !== undefined
+          ? project.description
+          : existing.description,
+      imageUrl:
+        project.imageUrl !== undefined ? project.imageUrl : existing.imageUrl,
+      teamId: existing.teamId,
+      createdAt: existing.createdAt,
+      updatedAt: new Date(),
+    });
 
-    return Promise.resolve(project);
+    this.projects.set(projectId, updated);
+
+    return Promise.resolve(updated);
   }
 
   delete(projectId: string, userId: string): Promise<void> {

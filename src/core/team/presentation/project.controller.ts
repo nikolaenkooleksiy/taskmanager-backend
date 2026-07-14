@@ -11,6 +11,7 @@ import { CurrentUser } from 'src/common/decorators';
 import { type JwtPayload } from 'src/common/types';
 import { ProjectService } from '../app/project.service';
 import { CreateProjectDto } from '../dto/create-project.dto';
+import { UpdateProjectDto } from '../dto/update-project.dto';
 
 @Controller('project')
 export class ProjectController {
@@ -24,7 +25,7 @@ export class ProjectController {
     return this.projectService.findAll(teamId, payload.sub);
   }
 
-  @Get(':id')
+  @Get(':id/info')
   async findById(@Param('id') id: string, @CurrentUser() payload: JwtPayload) {
     return this.projectService.findById(id, payload.sub);
   }
@@ -40,34 +41,35 @@ export class ProjectController {
   @Patch(':id')
   async update(
     @Param('id') projectId: string,
-    @Body() body: CreateProjectDto,
+    @Body() body: UpdateProjectDto,
     @CurrentUser() payload: JwtPayload,
   ) {
     return this.projectService.update(projectId, body, payload.sub);
   }
 
-  @Post('upload-url')
+  @Post(':id/upload-url')
   async getUploadUrl(
+    @Param('id') projectId: string,
     @CurrentUser() user: JwtPayload,
     @Body() dto: { fileName: string; contentType: string },
   ) {
     return this.projectService.generateProjectImageUrl(
-      user.sub,
+      projectId,
       dto.fileName,
       dto.contentType,
     );
   }
 
-  @Post('confirm')
+  @Post(':id/confirm')
   async confirmUpload(
+    @Param('id') projectId: string,
     @CurrentUser() user: JwtPayload,
     @Body() dto: { key: string },
-    @CurrentUser() payload: JwtPayload,
   ) {
     return await this.projectService.confirmProjectImageUpload(
       user.sub,
+      projectId,
       dto.key,
-      payload.role,
     );
   }
 

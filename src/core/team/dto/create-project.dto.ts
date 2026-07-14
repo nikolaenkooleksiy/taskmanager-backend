@@ -6,6 +6,9 @@ export class CreateProjectDto {
   name: string;
 
   @IsString()
+  teamId: string;
+
+  @IsString()
   @IsOptional()
   description?: string | null;
 

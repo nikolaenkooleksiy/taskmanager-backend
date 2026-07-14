@@ -31,8 +31,8 @@ export class ProjectRepository implements IProjectRepository {
     return ProjectMapper.toDomain(created);
   }
 
-  async update(projectId: string, userId: string, project: Project) {
-    const data = ProjectMapper.toPersistence(project);
+  async update(projectId: string, userId: string, project: Partial<Project>) {
+    const data = ProjectMapper.toPersistence(project as Project);
 
     const updated = await this.db.project.updateManyAndReturn({
       where: { id: projectId, team: { ownerId: userId } },

@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { StorageService } from 'src/infrastructure/storage/storage.service';
 import { ProjectService } from '../app/project.service';
 import { PROJECT_REPOSITORY } from '../domain/types/project.repository.interface';
 import { CreateProjectDto } from '../dto/create-project.dto';
 import { InMemoryProjectRepository } from '../infrastructure/repository/in-memory.project.repository';
-import { StorageService } from 'src/infrastructure/storage/storage.service';
 
 const mockDto: CreateProjectDto = {
   name: 'Test Project',
   description: 'Test description',
+  teamId: 'team-123',
 };
 
 const mockTeamId = 'team-123';
@@ -60,14 +61,17 @@ describe('ProjectService', () => {
     });
 
     it('should default description to null', async () => {
-      const dto: CreateProjectDto = { name: 'No description' };
+      const dto: CreateProjectDto = {
+        name: 'No description',
+        teamId: 'team-123',
+      };
       const project = await service.create(dto, mockTeamId);
 
       expect(project.description).toBeNull();
     });
 
     it('should default imageUrl to null', async () => {
-      const dto: CreateProjectDto = { name: 'No image' };
+      const dto: CreateProjectDto = { name: 'No image', teamId: 'team-123' };
       const project = await service.create(dto, mockTeamId);
 
       expect(project.imageUrl).toBeNull();
@@ -77,7 +81,7 @@ describe('ProjectService', () => {
   describe('findAll', () => {
     it('should return all projects for team', async () => {
       await service.create(mockDto, mockTeamId);
-      await service.create({ name: 'Second' }, mockTeamId);
+      await service.create({ name: 'Second', teamId: 'team-123' }, mockTeamId);
 
       const projects = await service.findAll(mockTeamId, mockUserId);
       expect(projects).toHaveLength(2);
@@ -85,7 +89,7 @@ describe('ProjectService', () => {
 
     it('should filter by teamId', async () => {
       await service.create(mockDto, mockTeamId);
-      await service.create({ name: 'Other' }, otherTeamId);
+      await service.create({ name: 'Other', teamId: 'team-456' }, otherTeamId);
 
       const projects = await service.findAll(mockTeamId, mockUserId);
       expect(projects).toHaveLength(1);
@@ -119,7 +123,11 @@ describe('ProjectService', () => {
       const created = await service.create(mockDto, mockTeamId);
       const updated = await service.update(
         created.id,
-        { name: 'Updated Name', description: 'Updated description' },
+        {
+          name: 'Updated Name',
+          description: 'Updated description',
+          teamId: 'team-123',
+        },
         mockUserId,
       );
 
@@ -133,7 +141,11 @@ describe('ProjectService', () => {
 
     it('should throw when project not found', async () => {
       await expect(
-        service.update('non-existent-id', { name: 'New' }, mockUserId),
+        service.update(
+          'non-existent-id',
+          { name: 'New', teamId: 'team-123' },
+          mockUserId,
+        ),
       ).rejects.toThrow('Project not found');
     });
   });
