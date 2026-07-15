@@ -3,11 +3,13 @@ import { Team } from '../model/team.model';
 export const TEAM_REPOSITORY = Symbol('TEAM_REPOSITORY');
 
 export interface ITeamRepository {
-  findById(teamId: string): Promise<Team>;
-  findByName(name: string): Promise<Team>;
+  findAll(ownerId: string): Promise<Team[]>;
 
-  create(team: Team): Promise<void>;
-  update(team: Team): Promise<void>;
+  findById(teamId: string, ownerId: string): Promise<Team>;
+  findByName(name: string, ownerId: string): Promise<Team>;
 
-  delete(teamId: string): Promise<void>;
+  create(team: Team): Promise<Team>;
+  update(team: Partial<Team>): Promise<Team>;
+
+  delete(teamId: string, ownerId: string): Promise<void>;
 }

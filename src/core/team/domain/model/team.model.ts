@@ -7,19 +7,17 @@ interface CreateTeamProps {
   type?: TeamType;
 }
 
-export class Team {
-  readonly id: string;
+interface TeamProps {
+  id: string;
   name: string;
   type: TeamType;
-
-  readonly ownerId: string;
-  readonly createdAt: Date;
-
+  ownerId: string;
+  createdAt: Date;
   updatedAt: Date;
+}
 
-  private constructor(props: Team) {
-    Object.assign(this, props);
-  }
+export class Team {
+  private constructor(private props: TeamProps) {}
 
   static create(props: CreateTeamProps): Team {
     const now = new Date();
@@ -32,5 +30,33 @@ export class Team {
       createdAt: now,
       updatedAt: now,
     });
+  }
+
+  static restore(props: TeamProps): Team {
+    return new Team(props);
+  }
+
+  get id(): string {
+    return this.props.id;
+  }
+
+  get name(): string {
+    return this.props.name;
+  }
+
+  get type(): TeamType {
+    return this.props.type;
+  }
+
+  get ownerId(): string {
+    return this.props.ownerId;
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
+  get updatedAt(): Date {
+    return this.props.updatedAt;
   }
 }
