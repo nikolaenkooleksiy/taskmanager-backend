@@ -1,4 +1,4 @@
-import { Prisma, Todo as PrismaTodo } from '@prisma/client';
+import { Todo as PrismaTodo } from '@prisma/client';
 import { Todo } from '../../domain/model/todo.model';
 import { TodoResponseDto } from '../../dto/todo-response.dto';
 
@@ -13,20 +13,20 @@ export class TodoMapper {
     };
   }
 
-  static toModel(todo: PrismaTodo): Todo {
-    return new Todo(todo);
+  static toDomain(todo: PrismaTodo): Todo {
+    return Todo.restore({ ...todo });
   }
 
-  static toPersistence(todo: Todo): Prisma.TodoCreateInput {
+  static toPersistence(todo: Todo) {
     return {
       id: todo.id,
       title: todo.title,
       description: todo.description,
       status: todo.status,
-      project: { connect: { id: todo.projectId } },
+      assigneeId: todo.assigneeId,
+      projectId: todo.projectId,
       createdAt: todo.createdAt,
       updatedAt: todo.updatedAt,
-      assignee: { connect: { id: todo.userId } },
     };
   }
 }

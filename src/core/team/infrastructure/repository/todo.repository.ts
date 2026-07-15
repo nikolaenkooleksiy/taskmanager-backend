@@ -10,27 +10,23 @@ export class TodoRepository implements ITodoRepository {
 
   async findAll(): Promise<Todo[]> {
     const todos = await this.db.todo.findMany();
-    return todos.map((todo) => TodoMapper.toModel(todo));
+
+    return todos.map((todo) => TodoMapper.toDomain(todo));
   }
 
   async findById(todoId: string): Promise<Todo> {
     const todo = await this.db.todo.findUniqueOrThrow({
       where: { id: todoId },
     });
-    return TodoMapper.toModel(todo);
-  }
 
-  async findByUserId(userId: string): Promise<Todo[]> {
-    const todos = await this.db.todo.findMany({
-      where: { assigneeId: userId },
-    });
-    return todos.map((todo) => TodoMapper.toModel(todo));
+    return TodoMapper.toDomain(todo);
   }
 
   async create(todo: Todo): Promise<Todo> {
     const data = TodoMapper.toPersistence(todo);
     const created = await this.db.todo.create({ data });
-    return TodoMapper.toModel(created);
+
+    return TodoMapper.toDomain(created);
   }
 
   async update(todoId: string, todo: Partial<Todo>): Promise<Todo> {
@@ -38,7 +34,8 @@ export class TodoRepository implements ITodoRepository {
       where: { id: todoId },
       data: todo,
     });
-    return TodoMapper.toModel(updated);
+
+    return TodoMapper.toDomain(updated);
   }
 
   async delete(todoId: string): Promise<void> {

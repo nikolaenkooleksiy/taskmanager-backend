@@ -9,6 +9,7 @@ import { InMemoryTodoRepository } from '../infrastructure/repository/in-memory.t
 const mockDto: CreateTodoDto = {
   title: 'Test Todo',
   description: 'Test description',
+  projectId: 'project-123',
 };
 
 const mockUserId = 'user-123';
@@ -57,14 +58,20 @@ describe('TodoService', () => {
     });
 
     it('should default status to PENDING', async () => {
-      const dto: CreateTodoDto = { title: 'No status' };
+      const dto: CreateTodoDto = {
+        title: 'No status',
+        projectId: 'project-123',
+      };
       const todo = await service.create(dto, mockUserId);
 
       expect(todo.status).toBe(TodoStatus.Pending);
     });
 
     it('should default description to null', async () => {
-      const dto: CreateTodoDto = { title: 'No description' };
+      const dto: CreateTodoDto = {
+        title: 'No description',
+        projectId: 'project-123',
+      };
       const todo = await service.create(dto, mockUserId);
 
       expect(todo.description).toBeNull();
@@ -74,7 +81,10 @@ describe('TodoService', () => {
   describe('findAll', () => {
     it('should return all todos', async () => {
       await service.create(mockDto, mockUserId);
-      await service.create({ title: 'Second' }, mockUserId);
+      await service.create(
+        { title: 'Second', projectId: 'project-123' },
+        mockUserId,
+      );
 
       const todos = await service.findAll();
       expect(todos).toHaveLength(2);
@@ -103,35 +113,20 @@ describe('TodoService', () => {
     });
   });
 
-  describe('findByUserId', () => {
-    it('should return todos for user', async () => {
-      await service.create(mockDto, mockUserId);
-      await service.create({ title: 'Other' }, 'other-user');
-
-      const todos = await service.findByUserId(mockUserId);
-      expect(todos).toHaveLength(1);
-    });
-
-    it('should return empty array when user has no todos', async () => {
-      const todos = await service.findByUserId('no-user');
-      expect(todos).toEqual([]);
-    });
-  });
-
   describe('update', () => {
     it('should update todo fields', async () => {
       const created = await service.create(mockDto, mockUserId);
       const updated = await service.update(created.id, {
         title: 'Updated Title',
-        status: TodoStatus.COMPLETED,
+        status: TodoStatus.Completed,
       });
 
       expect(updated.title).toBe('Updated Title');
-      expect(updated.status).toBe(TodoStatus.COMPLETED);
+      expect(updated.status).toBe(TodoStatus.Completed);
 
       const found = await service.findById(created.id);
       expect(found.title).toBe('Updated Title');
-      expect(found.status).toBe(TodoStatus.COMPLETED);
+      expect(found.status).toBe(TodoStatus.Completed);
     });
 
     it('should throw when todo not found', async () => {

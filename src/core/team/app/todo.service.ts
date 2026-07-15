@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { TodoStatus } from '@prisma/client';
 import { GenerateDescriptionDto } from 'src/infrastructure/llm/dto/generate-description.dto';
 import { LlmService } from 'src/infrastructure/llm/llm.service';
 import { Todo } from '../domain/model/todo.model';
@@ -28,28 +27,20 @@ export class TodoService {
     return TodoMapper.toResponse(todo);
   }
 
-  async findByUserId(userId: string) {
-    const todos = await this.todoRepository.findByUserId(userId);
-    return todos.map((todo) => TodoMapper.toResponse(todo));
-  }
-
   async create(dto: CreateTodoDto, userId: string) {
-    const todo = new Todo({
-      id: crypto.randomUUID(),
-      title: dto.title,
-      description: dto.description ?? null,
-      status: TodoStatus.Pending,
-      userId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const todo = Todo.create({
+      ...dto,
+      assigneeId: userId,
     });
 
     const created = await this.todoRepository.create(todo);
+
     return TodoMapper.toResponse(created);
   }
 
   async update(todoId: string, dto: UpdateTodoDto) {
     const updated = await this.todoRepository.update(todoId, dto);
+
     return TodoMapper.toResponse(updated);
   }
 

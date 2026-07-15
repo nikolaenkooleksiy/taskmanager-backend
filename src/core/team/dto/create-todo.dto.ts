@@ -1,4 +1,4 @@
-import { IsOptional, IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
 
 export class CreateTodoDto {
   @IsString()
@@ -8,4 +8,7 @@ export class CreateTodoDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsUUID()
+  projectId: string;
 }
