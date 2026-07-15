@@ -6,6 +6,7 @@ import {
 } from '../domain/types/team.repository.interface';
 import { CreateTeamDto } from '../dto/create-team.dto';
 import { UpdateTeamDto } from '../dto/update-team.dto';
+import { TeamMapper } from '../infrastructure/mapper/team.mapper';
 
 @Injectable()
 export class TeamService {
@@ -14,15 +15,21 @@ export class TeamService {
   ) {}
 
   async getTeamById(teamId: string, ownerId: string) {
-    return this.teamRepository.findById(teamId, ownerId);
+    return TeamMapper.toResponse(
+      await this.teamRepository.findById(teamId, ownerId),
+    );
   }
 
   async getTeamByName(name: string, ownerId: string) {
-    return this.teamRepository.findByName(name, ownerId);
+    return TeamMapper.toResponse(
+      await this.teamRepository.findByName(name, ownerId),
+    );
   }
 
   async getAllTeams(ownerId: string) {
-    return this.teamRepository.findAll(ownerId);
+    return (await this.teamRepository.findAll(ownerId)).map((t) =>
+      TeamMapper.toResponse(t),
+    );
   }
 
   async createTeam(ownerId: string, dto: CreateTeamDto) {
@@ -32,7 +39,7 @@ export class TeamService {
       ownerId,
     });
 
-    return this.teamRepository.create(team);
+    await this.teamRepository.create(team);
   }
 
   async updateTeam(teamId: string, ownerId: string, dto: UpdateTeamDto) {

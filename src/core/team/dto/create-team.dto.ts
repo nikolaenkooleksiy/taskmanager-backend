@@ -5,6 +5,6 @@ export class CreateTeamDto {
   @IsString()
   name: string;
 
-  @IsEnum(() => TeamType)
+  @IsEnum(TeamType)
   type: TeamType;
 }
