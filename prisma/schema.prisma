@@ -31,7 +31,6 @@ model Team {
   id String @id
 
   name String
-  type TeamType @default(Free)
 
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String @map("owner_id")
@@ -84,11 +83,6 @@ model Todo {
   @@map("todos")
 }
 
-enum TeamType {
-  Startup
-  Enterprise
-  Free
-}
 
 enum UserRole {
   Admin

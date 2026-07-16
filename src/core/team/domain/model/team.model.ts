@@ -1,16 +1,13 @@
-import { TeamType } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
 interface CreateTeamProps {
   name: string;
   ownerId: string;
-  type?: TeamType;
 }
 
 interface TeamProps {
   id: string;
   name: string;
-  type: TeamType;
   ownerId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -25,7 +22,6 @@ export class Team {
     return new Team({
       id: randomUUID(),
       name: props.name,
-      type: props.type ?? TeamType.Free,
       ownerId: props.ownerId,
       createdAt: now,
       updatedAt: now,
@@ -42,10 +38,6 @@ export class Team {
 
   get name(): string {
     return this.props.name;
-  }
-
-  get type(): TeamType {
-    return this.props.type;
   }
 
   get ownerId(): string {
