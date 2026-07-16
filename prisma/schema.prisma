@@ -32,6 +32,8 @@ model Team {
 
   name String
 
+  icon String 
+
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String @map("owner_id")
 

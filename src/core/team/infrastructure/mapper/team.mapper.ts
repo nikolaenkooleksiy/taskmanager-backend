@@ -12,6 +12,7 @@ export class TeamMapper {
     return {
       id: team.id,
       name: team.name,
+      icon: team.icon,
     };
   }
 
@@ -19,6 +20,7 @@ export class TeamMapper {
     return {
       id: team.id,
       name: team.name,
+      icon: team.icon,
       ownerId: team.ownerId,
       createdAt: team.createdAt,
       updatedAt: team.updatedAt,

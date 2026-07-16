@@ -33,10 +33,7 @@ export class TeamService {
   }
 
   async createTeam(ownerId: string, dto: CreateTeamDto) {
-    const team = Team.create({
-      name: dto.name,
-      ownerId,
-    });
+    const team = Team.create({ ...dto, ownerId });
 
     await this.teamRepository.create(team);
   }
