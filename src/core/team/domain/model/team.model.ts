@@ -2,14 +2,12 @@ import { randomUUID } from 'crypto';
 
 interface CreateTeamProps {
   name: string;
-  icon: string;
   ownerId: string;
 }
 
 interface TeamProps {
   id: string;
   name: string;
-  icon: string;
   ownerId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -24,7 +22,6 @@ export class Team {
     return new Team({
       id: randomUUID(),
       name: props.name,
-      icon: props.icon,
       ownerId: props.ownerId,
       createdAt: now,
       updatedAt: now,
@@ -45,10 +42,6 @@ export class Team {
 
   get ownerId(): string {
     return this.props.ownerId;
-  }
-
-  get icon(): string {
-    return this.props.icon;
   }
 
   get createdAt(): Date {
