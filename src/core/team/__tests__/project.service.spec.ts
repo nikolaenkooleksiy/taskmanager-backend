@@ -9,11 +9,11 @@ const mockDto: CreateProjectDto = {
   name: 'Test Project',
   description: 'Test description',
   teamId: 'team-123',
+  icon: 'default-icon',
 };
 
 const mockTeamId = 'team-123';
 const mockUserId = 'user-123';
-const otherTeamId = 'team-456';
 
 const mockStorageService = {
   getUploadUrl: jest.fn(),
@@ -52,7 +52,7 @@ describe('ProjectService', () => {
 
   describe('create', () => {
     it('should create project and return response', async () => {
-      const project = await service.create(mockDto, mockTeamId);
+      const project = await service.create(mockDto);
 
       expect(project).toBeDefined();
       expect(project.id).toBeDefined();
@@ -63,33 +63,46 @@ describe('ProjectService', () => {
     it('should default description to null', async () => {
       const dto: CreateProjectDto = {
         name: 'No description',
+        icon: 'default-icon',
         teamId: 'team-123',
       };
-      const project = await service.create(dto, mockTeamId);
+      const project = await service.create(dto);
 
       expect(project.description).toBeNull();
     });
 
     it('should default imageUrl to null', async () => {
-      const dto: CreateProjectDto = { name: 'No image', teamId: 'team-123' };
-      const project = await service.create(dto, mockTeamId);
+      const dto: CreateProjectDto = {
+        name: 'No image',
+        teamId: 'team-123',
+        icon: 'default-icon',
+      };
+      const project = await service.create(dto);
 
-      expect(project.imageUrl).toBeNull();
+      expect(project.icon).not.toBeFalsy();
     });
   });
 
   describe('findAll', () => {
     it('should return all projects for team', async () => {
-      await service.create(mockDto, mockTeamId);
-      await service.create({ name: 'Second', teamId: 'team-123' }, mockTeamId);
+      await service.create(mockDto);
+      await service.create({
+        name: 'Second',
+        teamId: 'team-123',
+        icon: 'icon-2',
+      });
 
       const projects = await service.findAll(mockTeamId, mockUserId);
       expect(projects).toHaveLength(2);
     });
 
     it('should filter by teamId', async () => {
-      await service.create(mockDto, mockTeamId);
-      await service.create({ name: 'Other', teamId: 'team-456' }, otherTeamId);
+      await service.create(mockDto);
+      await service.create({
+        name: 'Other',
+        teamId: 'team-456',
+        icon: 'icon-3',
+      });
 
       const projects = await service.findAll(mockTeamId, mockUserId);
       expect(projects).toHaveLength(1);
@@ -103,7 +116,7 @@ describe('ProjectService', () => {
 
   describe('findById', () => {
     it('should return project by id', async () => {
-      const created = await service.create(mockDto, mockTeamId);
+      const created = await service.create(mockDto);
       const found = await service.findById(created.id, mockUserId);
 
       expect(found).toBeDefined();
@@ -120,7 +133,7 @@ describe('ProjectService', () => {
 
   describe('update', () => {
     it('should update project fields', async () => {
-      const created = await service.create(mockDto, mockTeamId);
+      const created = await service.create(mockDto);
       const updated = await service.update(
         created.id,
         {
@@ -152,7 +165,7 @@ describe('ProjectService', () => {
 
   describe('delete', () => {
     it('should delete project', async () => {
-      const created = await service.create(mockDto, mockTeamId);
+      const created = await service.create(mockDto);
       await service.delete(created.id, mockUserId);
 
       const projects = await service.findAll(mockTeamId, mockUserId);

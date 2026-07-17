@@ -45,14 +45,9 @@ export class ProjectService {
     }
   }
 
-  async create(dto: CreateProjectDto, userId: string) {
+  async create(dto: CreateProjectDto) {
     try {
-      const project = Project.create({
-        name: dto.name,
-        description: dto.description ?? null,
-        imageUrl: dto.imageUrl ?? null,
-        teamId: dto.teamId,
-      });
+      const project = Project.create({ ...dto });
 
       const created = await this.projectRepository.create(project);
 
@@ -92,27 +87,6 @@ export class ProjectService {
       }
       throw error;
     }
-  }
-
-  async generateProjectImageUrl(
-    projectId: string,
-    fileName: string,
-    contentType: string,
-  ) {
-    const folder = `projects/${projectId}`;
-    return this.storageService.getUploadUrl(folder, fileName, contentType);
-  }
-
-  async confirmProjectImageUpload(
-    userId: string,
-    projectId: string,
-    key: string,
-  ) {
-    const projectImageUrl = await this.storageService.getDownloadUrl(key);
-
-    await this.projectRepository.update(projectId, userId, {
-      imageUrl: projectImageUrl,
-    });
   }
 
   async delete(projectId: string, userId: string) {

@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
+import { IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -12,7 +12,6 @@ export class CreateProjectDto {
   @IsOptional()
   description?: string | null;
 
-  @IsUrl()
-  @IsOptional()
-  imageUrl?: string | null;
+  @IsString()
+  icon: string;
 }

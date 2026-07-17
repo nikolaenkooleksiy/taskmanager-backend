@@ -2,6 +2,6 @@ export class ProjectResponseDto {
   id: string;
   name: string;
   description: string | null;
-  imageUrl: string | null;
+  icon: string;
   createdAt: Date;
 }

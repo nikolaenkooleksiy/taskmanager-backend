@@ -31,11 +31,8 @@ export class ProjectController {
   }
 
   @Post()
-  async create(
-    @Body() body: CreateProjectDto,
-    @CurrentUser() payload: JwtPayload,
-  ) {
-    return this.projectService.create(body, payload.sub);
+  async create(@Body() body: CreateProjectDto) {
+    return this.projectService.create(body);
   }
 
   @Patch(':id')
@@ -45,32 +42,6 @@ export class ProjectController {
     @CurrentUser() payload: JwtPayload,
   ) {
     return this.projectService.update(projectId, body, payload.sub);
-  }
-
-  @Post(':id/upload-url')
-  async getUploadUrl(
-    @Param('id') projectId: string,
-    @CurrentUser() user: JwtPayload,
-    @Body() dto: { fileName: string; contentType: string },
-  ) {
-    return this.projectService.generateProjectImageUrl(
-      projectId,
-      dto.fileName,
-      dto.contentType,
-    );
-  }
-
-  @Post(':id/confirm')
-  async confirmUpload(
-    @Param('id') projectId: string,
-    @CurrentUser() user: JwtPayload,
-    @Body() dto: { key: string },
-  ) {
-    return await this.projectService.confirmProjectImageUpload(
-      user.sub,
-      projectId,
-      dto.key,
-    );
   }
 
   @Delete(':id')

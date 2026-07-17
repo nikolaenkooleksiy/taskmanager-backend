@@ -8,7 +8,7 @@ export class ProjectMapper {
       id: project.id,
       name: project.name,
       description: project.description,
-      imageUrl: project.imageUrl,
+      icon: project.icon,
       createdAt: project.createdAt,
     };
   }
@@ -22,7 +22,7 @@ export class ProjectMapper {
       id: project.id,
       name: project.name,
       description: project.description,
-      imageUrl: project.imageUrl,
+      icon: project.icon,
       teamId: project.teamId,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,

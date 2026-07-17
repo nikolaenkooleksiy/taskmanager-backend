@@ -6,7 +6,7 @@ import { IProjectRepository } from '../../domain/types/project.repository.interf
 export class InMemoryProjectRepository implements IProjectRepository {
   private readonly projects = new Map<string, Project>();
 
-  findAll(teamId: string, userId: string): Promise<Project[]> {
+  findAll(teamId: string): Promise<Project[]> {
     const projects = Array.from(this.projects.values()).filter(
       (project) => project.teamId === teamId,
     );
@@ -14,7 +14,7 @@ export class InMemoryProjectRepository implements IProjectRepository {
     return Promise.resolve(projects);
   }
 
-  findById(projectId: string, userId: string): Promise<Project> {
+  findById(projectId: string): Promise<Project> {
     const project = this.projects.get(projectId);
     if (!project) return Promise.reject(new Error('Project not found'));
     return Promise.resolve(project);
@@ -43,8 +43,7 @@ export class InMemoryProjectRepository implements IProjectRepository {
         project.description !== undefined
           ? project.description
           : existing.description,
-      imageUrl:
-        project.imageUrl !== undefined ? project.imageUrl : existing.imageUrl,
+      icon: project.icon !== undefined ? project.icon : existing.icon,
       teamId: existing.teamId,
       createdAt: existing.createdAt,
       updatedAt: new Date(),
@@ -55,7 +54,7 @@ export class InMemoryProjectRepository implements IProjectRepository {
     return Promise.resolve(updated);
   }
 
-  delete(projectId: string, userId: string): Promise<void> {
+  delete(projectId: string): Promise<void> {
     this.projects.delete(projectId);
     return Promise.resolve();
   }

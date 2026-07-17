@@ -48,7 +48,7 @@ model Project {
 
   name        String
   description String?
-  imageUrl    String?
+  icon    String
 
   todos Todo[]
 

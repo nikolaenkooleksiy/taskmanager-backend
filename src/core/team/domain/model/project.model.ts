@@ -4,7 +4,7 @@ export interface ProjectProps {
   id: string;
   name: string;
   description: string | null;
-  imageUrl: string | null;
+  icon: string;
   teamId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -13,7 +13,7 @@ export interface ProjectProps {
 export interface CreateProjectProps {
   name: string;
   description?: string | null;
-  imageUrl?: string | null;
+  icon: string;
   teamId: string;
 }
 
@@ -27,7 +27,7 @@ export class Project {
       id: randomUUID(),
       name: props.name,
       description: props.description ?? null,
-      imageUrl: props.imageUrl ?? null,
+      icon: props.icon,
       teamId: props.teamId,
       createdAt: now,
       updatedAt: now,
@@ -50,8 +50,8 @@ export class Project {
     return this.props.description;
   }
 
-  get imageUrl(): string | null {
-    return this.props.imageUrl;
+  get icon(): string {
+    return this.props.icon;
   }
 
   get teamId(): string {
@@ -80,8 +80,8 @@ export class Project {
     this.props.updatedAt = new Date();
   }
 
-  changeImage(imageUrl: string | null): void {
-    this.props.imageUrl = imageUrl;
+  changeIcon(icon: string): void {
+    this.props.icon = icon;
     this.props.updatedAt = new Date();
   }
 }
