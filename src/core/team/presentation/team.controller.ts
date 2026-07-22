@@ -54,4 +54,12 @@ export class TeamController {
   ) {
     return this.teamService.deleteTeam(teamId, payload.sub);
   }
+
+  @Get(':id/stats')
+  async getStats(
+    @Param('id') teamId: string,
+    @CurrentUser() payload: JwtPayload,
+  ) {
+    return this.teamService.getTeamStats(teamId, payload.sub);
+  }
 }

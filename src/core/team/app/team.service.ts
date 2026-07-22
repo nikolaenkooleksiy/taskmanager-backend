@@ -45,4 +45,8 @@ export class TeamService {
   async deleteTeam(teamId: string, ownerId: string) {
     return this.teamRepository.delete(teamId, ownerId);
   }
+
+  async getTeamStats(teamId: string, ownerId: string) {
+    return await this.teamRepository.getStats(teamId, ownerId);
+  }
 }

@@ -2,6 +2,12 @@ import { Team } from '../model/team.model';
 
 export const TEAM_REPOSITORY = Symbol('TEAM_REPOSITORY');
 
+export interface TeamStats {
+  projectsCount: number;
+  tasksCount: number;
+  usersCount: number;
+}
+
 export interface ITeamRepository {
   findAll(ownerId: string): Promise<Team[]>;
 
@@ -12,4 +18,6 @@ export interface ITeamRepository {
   update(team: Partial<Team>): Promise<Team>;
 
   delete(teamId: string, ownerId: string): Promise<void>;
+
+  getStats(teamId: string, ownerId: string): Promise<TeamStats>;
 }
