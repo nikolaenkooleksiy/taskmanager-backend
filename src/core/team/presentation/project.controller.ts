@@ -51,4 +51,9 @@ export class ProjectController {
   ) {
     return this.projectService.delete(projectId, payload.sub);
   }
+
+  @Get(':teamId/stats')
+  async getProjectsStats(@Param('teamId') teamId: string) {
+    return this.projectService.getProjectsStats(teamId);
+  }
 }

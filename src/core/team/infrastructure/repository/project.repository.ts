@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/infrastructure/database/prisma.service';
 import { Project } from '../../domain/model/project.model';
-import { IProjectRepository } from '../../domain/types/project.repository.interface';
+import {
+  IProjectRepository,
+  ProjectWithStats,
+} from '../../domain/types/project.repository.interface';
 import { ProjectMapper } from '../mapper/project.mapper';
 
 @Injectable()
@@ -49,6 +52,45 @@ export class ProjectRepository implements IProjectRepository {
   async delete(projectId: string, userId: string) {
     await this.db.project.deleteMany({
       where: { id: projectId, team: { ownerId: userId } },
+    });
+  }
+
+  async getProjectsStats(teamId: string): Promise<ProjectWithStats[]> {
+    const projects = await this.db.project.findMany({
+      where: { teamId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        icon: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: { todos: true },
+        },
+        todos: {
+          where: { status: 'Completed' },
+          select: { id: true },
+        },
+      },
+    });
+
+    return projects.map((p) => {
+      const domainProject = ProjectMapper.toDomain({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        icon: p.icon,
+        createdAt: p.createdAt,
+        teamId,
+        updatedAt: p.updatedAt,
+      });
+
+      return {
+        ...ProjectMapper.toResponse(domainProject),
+        tasksTotal: p._count.todos,
+        tasksDone: p.todos.length,
+      };
     });
   }
 }

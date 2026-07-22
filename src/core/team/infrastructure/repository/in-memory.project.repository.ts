@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Project } from '../../domain/model/project.model';
-import { IProjectRepository } from '../../domain/types/project.repository.interface';
+import {
+  IProjectRepository,
+  ProjectWithStats,
+} from '../../domain/types/project.repository.interface';
 
 @Injectable()
 export class InMemoryProjectRepository implements IProjectRepository {
+  getProjectsStats(teamId: string): Promise<ProjectWithStats[]> {
+    throw new Error('Method not implemented.');
+  }
   private readonly projects = new Map<string, Project>();
 
   findAll(teamId: string): Promise<Project[]> {

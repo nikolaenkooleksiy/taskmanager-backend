@@ -102,4 +102,10 @@ export class ProjectService {
       throw error;
     }
   }
+
+  async getProjectsStats(teamId: string) {
+    const stats = await this.projectRepository.getProjectsStats(teamId);
+
+    return stats;
+  }
 }
