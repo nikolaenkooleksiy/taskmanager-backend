@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/infrastructure/database/prisma.service';
 import { Team } from '../../domain/model/team.model';
-import {
-  ITeamRepository,
-  type TeamStats,
-} from '../../domain/types/team.repository.interface';
+import { ITeamRepository } from '../../domain/types/team.repository.interface';
 import { TeamMapper } from '../mapper/team.mapper';
 
 @Injectable()
@@ -71,33 +68,5 @@ export class TeamRepository implements ITeamRepository {
         ownerId: ownerId,
       },
     });
-  }
-
-  async getStats(teamId: string, ownerId: string): Promise<TeamStats> {
-    const data = await this.db.team.findFirstOrThrow({
-      where: {
-        id: teamId,
-        ownerId: ownerId,
-      },
-      include: {
-        projects: {
-          include: {
-            todos: true,
-          },
-        },
-        owner: true,
-      },
-    });
-
-    const usersCount = 1;
-
-    return {
-      projectsCount: data.projects.length,
-      usersCount,
-      tasksCount: data.projects.reduce(
-        (acc, project) => acc + project.todos.length,
-        0,
-      ),
-    };
   }
 }

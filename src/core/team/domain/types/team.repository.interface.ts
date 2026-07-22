@@ -18,6 +18,4 @@ export interface ITeamRepository {
   update(team: Partial<Team>): Promise<Team>;
 
   delete(teamId: string, ownerId: string): Promise<void>;
-
-  getStats(teamId: string, ownerId: string): Promise<TeamStats>;
 }
